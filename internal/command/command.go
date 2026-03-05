@@ -41,7 +41,6 @@ func Initialize(cfg *config.Config) (*State, Commands, error) {
 	}
 
 	RegisterCommandHandlers(&cmds)
-
 	return &state, cmds, nil
 }
 
