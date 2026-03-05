@@ -2,7 +2,9 @@ package main
 
 import (
 	"fmt"
+	"os"
 
+	"github.com/vohrr/blog_aggregator/internal/command"
 	"github.com/vohrr/blog_aggregator/internal/config"
 )
 
@@ -13,23 +15,29 @@ func main() {
 	cfg, err := config.Read()
 	if err != nil {
 		fmt.Println(err.Error())
-		return
+		os.Exit(1)
 	} else {
 		fmt.Println("Configuration loaded")
+		fmt.Printf("Logged in as %s\n", cfg.CurrentUserName)
 	}
+	state, cmds := command.Initialize(cfg)
 
-	err = cfg.SetUser("vohrr")
+	args := os.Args
+	if len(args) < 2 {
+		fmt.Println("Expected gator <command>")
+		os.Exit(1)
+	}
+	args = args[1:]
+	cmd, err := command.Parse(args)
 	if err != nil {
 		fmt.Println(err.Error())
-		return
+		os.Exit(1)
 	}
 
-	cfg, err = config.Read()
+	fmt.Printf("Running %s...\n", cmd.Name)
+	err = cmds.Run(state, cmd)
 	if err != nil {
 		fmt.Println(err.Error())
-		return
-	} else {
-		fmt.Println(cfg.DbUrl)
-		fmt.Println(cfg.CurrentUserName)
+		os.Exit(1)
 	}
 }
