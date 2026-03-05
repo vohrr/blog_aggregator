@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 
+	_ "github.com/lib/pq"
 	"github.com/vohrr/blog_aggregator/internal/command"
 	"github.com/vohrr/blog_aggregator/internal/config"
 )
@@ -20,7 +21,11 @@ func main() {
 		fmt.Println("Configuration loaded")
 		fmt.Printf("Logged in as %s\n", cfg.CurrentUserName)
 	}
-	state, cmds := command.Initialize(cfg)
+	state, cmds, err := command.Initialize(cfg)
+	if err != nil {
+		fmt.Println(err.Error())
+		os.Exit(1)
+	}
 
 	args := os.Args
 	if len(args) < 2 {

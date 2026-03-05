@@ -16,7 +16,9 @@ const (
 )
 
 func getConfigPath() (string, error) {
-	path, err := os.Getwd()
+	//all the tests need config to be in the home dir even though it should be in the root }:(
+	//path, err := os.Getwd()
+	path, err := os.UserHomeDir()
 	if err != nil {
 		return "", err
 	}
