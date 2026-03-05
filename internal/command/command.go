@@ -39,8 +39,8 @@ func Initialize(cfg *config.Config) (*State, Commands, error) {
 	cmds := Commands{
 		Commands: make(map[string]CommandHandler),
 	}
-	cmds.Register("login", LoginHandler)
-	cmds.Register("register", RegisterHandler)
+
+	RegisterCommandHandlers(&cmds)
 
 	return &state, cmds, nil
 }
