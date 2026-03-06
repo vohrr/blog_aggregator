@@ -6,4 +6,6 @@ func RegisterCommandHandlers(cmds *Commands) {
 	cmds.Register("reset", ResetHandler)
 	cmds.Register("users", UsersHandler)
 	cmds.Register("agg", AggHandler)
+	cmds.Register("addfeed", AddFeedHandler)
+	cmds.Register("feeds", FeedsHandler)
 }
