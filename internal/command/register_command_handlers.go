@@ -5,4 +5,5 @@ func RegisterCommandHandlers(cmds *Commands) {
 	cmds.Register("register", RegisterHandler)
 	cmds.Register("reset", ResetHandler)
 	cmds.Register("users", UsersHandler)
+	cmds.Register("agg", AggHandler)
 }
