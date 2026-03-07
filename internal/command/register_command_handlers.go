@@ -9,4 +9,5 @@ func RegisterCommandHandlers(cmds *Commands) {
 	cmds.Register("addfeed", AddFeedHandler)
 	cmds.Register("feeds", FeedsHandler)
 	cmds.Register("follow", FollowHandler)
+	cmds.Register("following", FollowingHandler)
 }
