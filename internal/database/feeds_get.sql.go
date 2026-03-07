@@ -13,7 +13,7 @@ import (
 )
 
 const getFeeds = `-- name: GetFeeds :many
-SELECT feeds.id, feeds.created_at, feeds.updated_at, feeds.name, feeds.url, feeds.user_id, users.Name as UserName FROM feeds
+SELECT feeds.id, feeds.created_at, feeds.updated_at, feeds.name, feeds.url, feeds.user_id, users.Name as user_name FROM feeds
 INNER JOIN users
 ON feeds.user_id = users.id
 `
@@ -25,7 +25,7 @@ type GetFeedsRow struct {
 	Name      string
 	Url       string
 	UserID    uuid.UUID
-	Username  string
+	UserName  string
 }
 
 func (q *Queries) GetFeeds(ctx context.Context) ([]GetFeedsRow, error) {
@@ -44,7 +44,7 @@ func (q *Queries) GetFeeds(ctx context.Context) ([]GetFeedsRow, error) {
 			&i.Name,
 			&i.Url,
 			&i.UserID,
-			&i.Username,
+			&i.UserName,
 		); err != nil {
 			return nil, err
 		}
