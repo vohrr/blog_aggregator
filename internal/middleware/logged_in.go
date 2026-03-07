@@ -11,7 +11,6 @@ func LoggedIn(handler command.AuthCommandHandler) command.CommandHandler {
 		if err != nil {
 			return err
 		}
-		handler(s, cmd, user)
-		return nil
+		return handler(s, cmd, user)
 	}
 }
