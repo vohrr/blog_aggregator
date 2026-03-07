@@ -10,7 +10,7 @@ import (
 	"github.com/vohrr/blog_aggregator/internal/database"
 )
 
-func FollowHandler(s *State, cmd Command) error {
+func FollowHandler(s *State, cmd Command, user database.User) error {
 	if len(cmd.Args) != 1 {
 		return fmt.Errorf("Invalid command arguments, expecting: follow <url>")
 	}
@@ -27,7 +27,7 @@ func FollowHandler(s *State, cmd Command) error {
 		ID:        uuid.New(),
 		CreatedAt: time.Now().UTC(),
 		UpdatedAt: time.Now().UTC(),
-		UserID:    cmd.UserID,
+		UserID:    user.ID,
 		FeedID:    feed.ID,
 	}
 	feedFollowResult, err := s.Db.CreateFeedFollow(context.Background(), feedFollowParams)

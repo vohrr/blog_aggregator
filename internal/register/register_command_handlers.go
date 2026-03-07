@@ -25,7 +25,6 @@ func Initialize(cfg *config.Config) (*command.State, command.Commands, error) {
 	}
 
 	RegisterCommandHandlers(&cmds)
-	RegisterAuthCommandHandlers(&cmds)
 	return &state, cmds, nil
 }
 
@@ -36,9 +35,6 @@ func RegisterCommandHandlers(cmds *command.Commands) {
 	cmds.Register("users", command.UsersHandler)
 	cmds.Register("agg", command.AggHandler)
 	cmds.Register("feeds", command.FeedsHandler)
-}
-
-func RegisterAuthCommandHandlers(cmds *command.Commands) {
 	cmds.Register("addfeed", middleware.LoggedIn(command.AddFeedHandler))
 	cmds.Register("follow", middleware.LoggedIn(command.FollowHandler))
 	cmds.Register("following", middleware.LoggedIn(command.FollowingHandler))

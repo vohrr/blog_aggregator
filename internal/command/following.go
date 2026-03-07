@@ -3,11 +3,13 @@ package command
 import (
 	"context"
 	"fmt"
+
+	"github.com/vohrr/blog_aggregator/internal/database"
 )
 
-func FollowingHandler(s *State, cmd Command) error {
+func FollowingHandler(s *State, cmd Command, user database.User) error {
 
-	following, err := s.Db.GetFeedFollowsForUser(context.Background(), cmd.UserID)
+	following, err := s.Db.GetFeedFollowsForUser(context.Background(), user.ID)
 	if err != nil {
 		return err
 	}

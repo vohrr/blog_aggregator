@@ -3,16 +3,14 @@ package command
 import (
 	"fmt"
 
-	"github.com/google/uuid"
 	_ "github.com/lib/pq"
 	"github.com/vohrr/blog_aggregator/internal/config"
 	"github.com/vohrr/blog_aggregator/internal/database"
 )
 
 type Command struct {
-	Name   string
-	Args   []string
-	UserID uuid.UUID
+	Name string
+	Args []string
 }
 
 type State struct {
@@ -21,6 +19,7 @@ type State struct {
 }
 
 type CommandHandler func(s *State, cmd Command) error
+type AuthCommandHandler func(s *State, cmd Command, user database.User) error
 
 type Commands struct {
 	Commands map[string]CommandHandler

@@ -9,7 +9,7 @@ import (
 	"github.com/vohrr/blog_aggregator/internal/database"
 )
 
-func AddFeedHandler(s *State, cmd Command) error {
+func AddFeedHandler(s *State, cmd Command, user database.User) error {
 	if len(cmd.Args) != 2 {
 		return fmt.Errorf("Invalid arguments, expecting: addfeed <name> <url>")
 	}
@@ -22,7 +22,7 @@ func AddFeedHandler(s *State, cmd Command) error {
 		UpdatedAt: time.Now().UTC(),
 		Name:      name,
 		Url:       url,
-		UserID:    cmd.UserID,
+		UserID:    user.ID,
 	}
 	feed, err := s.Db.AddFeed(context.Background(), feedParams)
 	if err != nil {
@@ -32,7 +32,7 @@ func AddFeedHandler(s *State, cmd Command) error {
 		ID:        uuid.New(),
 		CreatedAt: time.Now().UTC(),
 		UpdatedAt: time.Now().UTC(),
-		UserID:    cmd.UserID,
+		UserID:    user.ID,
 		FeedID:    feed.ID,
 	}
 	_, err = s.Db.CreateFeedFollow(context.Background(), ffParams)
