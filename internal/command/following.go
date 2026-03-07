@@ -7,12 +7,7 @@ import (
 
 func FollowingHandler(s *State, cmd Command) error {
 
-	user, err := s.Db.GetByName(context.Background(), s.Cfg.CurrentUserName)
-	if err != nil {
-		return err
-	}
-
-	following, err := s.Db.GetFeedFollowsForUser(context.Background(), user.ID)
+	following, err := s.Db.GetFeedFollowsForUser(context.Background(), cmd.UserID)
 	if err != nil {
 		return err
 	}

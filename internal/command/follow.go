@@ -23,15 +23,11 @@ func FollowHandler(s *State, cmd Command) error {
 			return err
 		}
 	}
-	user, err := s.Db.GetByName(context.Background(), s.Cfg.CurrentUserName)
-	if err != nil {
-		return err
-	}
 	feedFollowParams := database.CreateFeedFollowParams{
 		ID:        uuid.New(),
 		CreatedAt: time.Now().UTC(),
 		UpdatedAt: time.Now().UTC(),
-		UserID:    user.ID,
+		UserID:    cmd.UserID,
 		FeedID:    feed.ID,
 	}
 	feedFollowResult, err := s.Db.CreateFeedFollow(context.Background(), feedFollowParams)

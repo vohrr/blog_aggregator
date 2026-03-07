@@ -1,17 +1,18 @@
 package command
 
 import (
-	"database/sql"
 	"fmt"
 
+	"github.com/google/uuid"
 	_ "github.com/lib/pq"
 	"github.com/vohrr/blog_aggregator/internal/config"
 	"github.com/vohrr/blog_aggregator/internal/database"
 )
 
 type Command struct {
-	Name string
-	Args []string
+	Name   string
+	Args   []string
+	UserID uuid.UUID
 }
 
 type State struct {
@@ -23,25 +24,6 @@ type CommandHandler func(s *State, cmd Command) error
 
 type Commands struct {
 	Commands map[string]CommandHandler
-}
-
-func Initialize(cfg *config.Config) (*State, Commands, error) {
-	db, err := sql.Open("postgres", cfg.DbUrl)
-	if err != nil {
-		return &State{}, Commands{}, err
-	}
-
-	state := State{
-		Cfg: cfg,
-		Db:  database.New(db),
-	}
-
-	cmds := Commands{
-		Commands: make(map[string]CommandHandler),
-	}
-
-	RegisterCommandHandlers(&cmds)
-	return &state, cmds, nil
 }
 
 func Parse(args []string) (Command, error) {

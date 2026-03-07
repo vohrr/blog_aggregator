@@ -7,6 +7,7 @@ import (
 	_ "github.com/lib/pq"
 	"github.com/vohrr/blog_aggregator/internal/command"
 	"github.com/vohrr/blog_aggregator/internal/config"
+	"github.com/vohrr/blog_aggregator/internal/register"
 )
 
 func main() {
@@ -21,7 +22,7 @@ func main() {
 		fmt.Println("Configuration loaded")
 		fmt.Printf("Logged in as %s\n", cfg.CurrentUserName)
 	}
-	state, cmds, err := command.Initialize(cfg)
+	state, cmds, err := register.Initialize(cfg)
 	if err != nil {
 		fmt.Println(err.Error())
 		os.Exit(1)
