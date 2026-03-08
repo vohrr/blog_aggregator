@@ -2,9 +2,12 @@ package command
 
 import (
 	"context"
+	"database/sql"
 	"fmt"
 	"time"
 
+	"github.com/google/uuid"
+	"github.com/vohrr/blog_aggregator/internal/database"
 	"github.com/vohrr/blog_aggregator/internal/rss"
 )
 
@@ -42,7 +45,37 @@ func scrapeFeeds(s *State) error {
 	}
 
 	for _, item := range rss_feed.Channel.Item {
-		fmt.Println(item.Title)
+		err = savePost(s, item, feed)
+		if err != nil {
+			//properly handle the error without breaking the feedloop
+			fmt.Printf("Error saving post - Title: %s, Error: %s", item.Title, err.Error())
+		}
+	}
+	return nil
+}
+
+func savePost(s *State, item rss.RSSItem, feed database.Feed) error {
+	var pubDate sql.NullTime
+	pubtime, err := time.Parse(time.DateTime, item.PubDate)
+	if err != nil {
+		pubDate = sql.NullTime{Valid: false}
+	} else {
+		pubDate = sql.NullTime{Time: pubtime, Valid: true}
+	}
+	postParams := database.CreatePostParams{
+		ID:          uuid.New(),
+		CreatedAt:   time.Now().UTC(),
+		UpdatedAt:   time.Now().UTC(),
+		Title:       item.Title,
+		Url:         item.Link,
+		Description: sql.NullString{String: item.Description},
+		PublishedAt: pubDate,
+		FeedID:      feed.ID,
+	}
+
+	_, err = s.Db.CreatePost(context.Background(), postParams)
+	if err != nil {
+		return err
 	}
 	return nil
 }
